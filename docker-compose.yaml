@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  golang-api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    volumes:
+      - ./:/app
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgres://${DB_USER:-user}:${DB_PASSWORD:-password}@postgres:${DB_PORT:-5432}/${DB_NAME:-mydb}"
+
+  postgres:
+    image: postgres:17
+    container_name: postgres-db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME:-mydb}
+      POSTGRES_USER: ${DB_USER:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-user} -d ${DB_NAME:-mydb}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
