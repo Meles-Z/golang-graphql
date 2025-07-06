@@ -23,18 +23,8 @@ func LoadConfig() (*Config, error) {
 	viper.AddConfigPath(".")
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
-	viper.BindEnv()
-
-	cfg := Config{
-		DBConfig{
-			Host:     viper.GetString(""),
-			Port:     viper.GetInt(""),
-			DBName:   viper.GetString(""),
-			User:     viper.GetString(""),
-			Password: viper.GetString(""),
-		},
-	}
-
+	viper.AutomaticEnv()
+	
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// Config file not found; ignore or log as needed
@@ -43,6 +33,15 @@ func LoadConfig() (*Config, error) {
 			// Config file was found but another error occurred
 			log.Fatalf("Error reading config file: %v", err)
 		}
+	}
+	cfg := Config{
+		DBConfig{
+			Host:     viper.GetString("DATABASE_HOST"),
+			Port:     viper.GetInt("DATABASE_PORT"),
+			DBName:   viper.GetString("DATABASE_NAME"),
+			User:     viper.GetString("DATABASE_USER"),
+			Password: viper.GetString("DATABASE_PASSWORD"),
+		},
 	}
 
 	return &cfg, nil
