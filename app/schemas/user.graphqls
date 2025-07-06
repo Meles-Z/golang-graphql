@@ -1,0 +1,16 @@
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  createdAt: String!
+}
+
+input UserInput {
+  name: String!
+  email: String!
+}
+
+input UserFilter {
+  name: String
+  email: String
+}

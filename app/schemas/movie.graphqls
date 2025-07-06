@@ -1,0 +1,17 @@
+type Movie {
+  id: ID!
+  title: String!
+  url: String!
+  releaseDate: String!
+}
+
+input MovieInput {
+  title: String!
+  url: String!
+  releaseDate: String!
+}
+
+input MovieFilter {
+  title: String
+  releaseDate: String
+}

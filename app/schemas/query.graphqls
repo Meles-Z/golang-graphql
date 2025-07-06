@@ -1,0 +1,7 @@
+type Query {
+  movies(filter: MovieFilter): [Movie!]!
+  movie(id: ID!): Movie
+  
+  users(filter: UserFilter): [User!]!
+  user(id: ID!): User
+}
