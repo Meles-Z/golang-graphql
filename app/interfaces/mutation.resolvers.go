@@ -6,7 +6,6 @@ package interfaces
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/meles-z/golang-graphql/app/generated"
 	"github.com/meles-z/golang-graphql/app/models"
@@ -14,35 +13,37 @@ import (
 
 // CreateMovie is the resolver for the createMovie field.
 func (r *mutationResolver) CreateMovie(ctx context.Context, input models.MovieInput) (*models.Movie, error) {
-	panic(fmt.Errorf("not implemented: CreateMovie - createMovie"))
+	return r.MovieRepo.Create(ctx, input)
 }
 
 // UpdateMovie is the resolver for the updateMovie field.
 func (r *mutationResolver) UpdateMovie(ctx context.Context, id string, input models.MovieInput) (*models.Movie, error) {
-	panic(fmt.Errorf("not implemented: UpdateMovie - updateMovie"))
+	return r.MovieRepo.Update(ctx, id, input)
 }
 
 // DeleteMovie is the resolver for the deleteMovie field.
 func (r *mutationResolver) DeleteMovie(ctx context.Context, id string) (bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteMovie - deleteMovie"))
+	return r.MovieRepo.Delete(ctx, id)
 }
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input models.UserInput) (*models.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	return r.UserRepo.Create(ctx, input)
 }
 
 // UpdateUser is the resolver for the updateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input models.UserInput) (*models.User, error) {
-	panic(fmt.Errorf("not implemented: UpdateUser - updateUser"))
+	return r.UserRepo.Update(ctx, id, input)
 }
 
 // DeleteUser is the resolver for the deleteUser field.
 func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteUser - deleteUser"))
+	return r.UserRepo.Delete(ctx, id)
 }
 
 // Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+func (r *Resolver) Mutation() generated.MutationResolver {
+	return &mutationResolver{r}
+}
 
 type mutationResolver struct{ *Resolver }

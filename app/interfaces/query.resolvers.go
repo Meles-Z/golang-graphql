@@ -6,7 +6,6 @@ package interfaces
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/meles-z/golang-graphql/app/generated"
 	"github.com/meles-z/golang-graphql/app/models"
@@ -14,25 +13,29 @@ import (
 
 // Movies is the resolver for the movies field.
 func (r *queryResolver) Movies(ctx context.Context, filter *models.MovieFilter) ([]*models.Movie, error) {
-	panic(fmt.Errorf("not implemented: Movies - movies"))
+	return r.MovieRepo.GetAll(ctx, filter)
 }
 
 // Movie is the resolver for the movie field.
 func (r *queryResolver) Movie(ctx context.Context, id string) (*models.Movie, error) {
-	panic(fmt.Errorf("not implemented: Movie - movie"))
+	return r.MovieRepo.GetByID(ctx, id)
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, filter *models.UserFilter) ([]*models.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	return r.UserRepo.GetAll(ctx, filter)
 }
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+	return r.UserRepo.GetByID(ctx, id)
 }
 
 // Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
+func (r *Resolver) Query() generated.QueryResolver {
+	return &queryResolver{r}
+}
 
-type queryResolver struct{ *Resolver }
+type queryResolver struct {
+	*Resolver
+}
