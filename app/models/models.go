@@ -2,13 +2,6 @@
 
 package models
 
-type Movie struct {
-	ID          string `json:"id"`
-	Title       string `json:"title"`
-	URL         string `json:"url"`
-	ReleaseDate string `json:"releaseDate"`
-}
-
 type MovieFilter struct {
 	Title       *string `json:"title,omitempty"`
 	ReleaseDate *string `json:"releaseDate,omitempty"`
@@ -24,13 +17,6 @@ type Mutation struct {
 }
 
 type Query struct {
-}
-
-type User struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	CreatedAt string `json:"createdAt"`
 }
 
 type UserFilter struct {

@@ -6,10 +6,8 @@ toolchain go1.23.10
 
 require (
 	github.com/99designs/gqlgen v0.17.76
-	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 	github.com/google/uuid v1.6.0
 	github.com/spf13/viper v1.20.1
-	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.5.30
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.30.0

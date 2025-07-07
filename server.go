@@ -44,7 +44,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to DB: %v", err)
 	}
-
+	err = db.AutoMigrate()
+	if err != nil {
+		log.Fatalf("❌ Failed to connect to migrate db: %v", err)
+	}
 	userRepo := persistence.NewUserRepository(gormDB)
 	movieRepo := persistence.NewMovieRepository(gormDB)
 

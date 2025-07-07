@@ -1,9 +1,15 @@
+
+
 type Movie {
-  id: ID!
+  id: String!
   title: String!
   url: String!
   releaseDate: String!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
 }
+
 
 input MovieInput {
   title: String!

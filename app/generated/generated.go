@@ -47,10 +47,13 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Movie struct {
+		CreatedAt   func(childComplexity int) int
+		DeletedAt   func(childComplexity int) int
 		ID          func(childComplexity int) int
 		ReleaseDate func(childComplexity int) int
 		Title       func(childComplexity int) int
 		URL         func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -71,9 +74,11 @@ type ComplexityRoot struct {
 
 	User struct {
 		CreatedAt func(childComplexity int) int
+		DeletedAt func(childComplexity int) int
 		Email     func(childComplexity int) int
 		ID        func(childComplexity int) int
 		Name      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
 	}
 }
 
@@ -111,6 +116,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Movie.createdAt":
+		if e.complexity.Movie.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Movie.CreatedAt(childComplexity), true
+
+	case "Movie.deletedAt":
+		if e.complexity.Movie.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.Movie.DeletedAt(childComplexity), true
+
 	case "Movie.id":
 		if e.complexity.Movie.ID == nil {
 			break
@@ -138,6 +157,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Movie.URL(childComplexity), true
+
+	case "Movie.updatedAt":
+		if e.complexity.Movie.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Movie.UpdatedAt(childComplexity), true
 
 	case "Mutation.createMovie":
 		if e.complexity.Mutation.CreateMovie == nil {
@@ -266,6 +292,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.CreatedAt(childComplexity), true
 
+	case "User.deletedAt":
+		if e.complexity.User.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.User.DeletedAt(childComplexity), true
+
 	case "User.email":
 		if e.complexity.User.Email == nil {
 			break
@@ -286,6 +319,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.User.Name(childComplexity), true
+
+	case "User.updatedAt":
+		if e.complexity.User.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.User.UpdatedAt(childComplexity), true
 
 	}
 	return 0, false
@@ -396,12 +436,18 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../schemas/movie.graphqls", Input: `type Movie {
-  id: ID!
+	{Name: "../schemas/movie.graphqls", Input: `
+
+type Movie {
+  id: String!
   title: String!
   url: String!
   releaseDate: String!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
 }
+
 
 input MovieInput {
   title: String!
@@ -429,11 +475,15 @@ input MovieFilter {
   users(filter: UserFilter): [User!]!
   user(id: ID!): User
 }`, BuiltIn: false},
-	{Name: "../schemas/user.graphqls", Input: `type User {
-  id: ID!
+	{Name: "../schemas/user.graphqls", Input: `scalar Time
+
+type User {
+  id: String!
   name: String!
   email: String!
-  createdAt: String!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
 }
 
 input UserInput {
@@ -869,7 +919,7 @@ func (ec *executionContext) _Movie_id(ctx context.Context, field graphql.Collect
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Movie_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -879,7 +929,7 @@ func (ec *executionContext) fieldContext_Movie_id(_ context.Context, field graph
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1017,6 +1067,135 @@ func (ec *executionContext) fieldContext_Movie_releaseDate(_ context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Movie_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.Movie) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Movie_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(models.TimeWrapper)
+	fc.Result = res
+	return ec.marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Movie_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Movie",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Movie_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.Movie) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Movie_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(models.TimeWrapper)
+	fc.Result = res
+	return ec.marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Movie_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Movie",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Movie_deletedAt(ctx context.Context, field graphql.CollectedField, obj *models.Movie) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Movie_deletedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DeletedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.TimeWrapper)
+	fc.Result = res
+	return ec.marshalOTime2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Movie_deletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Movie",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createMovie(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createMovie(ctx, field)
 	if err != nil {
@@ -1064,6 +1243,12 @@ func (ec *executionContext) fieldContext_Mutation_createMovie(ctx context.Contex
 				return ec.fieldContext_Movie_url(ctx, field)
 			case "releaseDate":
 				return ec.fieldContext_Movie_releaseDate(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Movie_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Movie_updatedAt(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_Movie_deletedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Movie", field.Name)
 		},
@@ -1129,6 +1314,12 @@ func (ec *executionContext) fieldContext_Mutation_updateMovie(ctx context.Contex
 				return ec.fieldContext_Movie_url(ctx, field)
 			case "releaseDate":
 				return ec.fieldContext_Movie_releaseDate(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Movie_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Movie_updatedAt(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_Movie_deletedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Movie", field.Name)
 		},
@@ -1249,6 +1440,10 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 				return ec.fieldContext_User_email(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_User_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_User_updatedAt(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_User_deletedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1314,6 +1509,10 @@ func (ec *executionContext) fieldContext_Mutation_updateUser(ctx context.Context
 				return ec.fieldContext_User_email(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_User_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_User_updatedAt(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_User_deletedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1434,6 +1633,12 @@ func (ec *executionContext) fieldContext_Query_movies(ctx context.Context, field
 				return ec.fieldContext_Movie_url(ctx, field)
 			case "releaseDate":
 				return ec.fieldContext_Movie_releaseDate(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Movie_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Movie_updatedAt(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_Movie_deletedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Movie", field.Name)
 		},
@@ -1496,6 +1701,12 @@ func (ec *executionContext) fieldContext_Query_movie(ctx context.Context, field 
 				return ec.fieldContext_Movie_url(ctx, field)
 			case "releaseDate":
 				return ec.fieldContext_Movie_releaseDate(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Movie_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Movie_updatedAt(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_Movie_deletedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Movie", field.Name)
 		},
@@ -1561,6 +1772,10 @@ func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field 
 				return ec.fieldContext_User_email(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_User_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_User_updatedAt(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_User_deletedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1623,6 +1838,10 @@ func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field g
 				return ec.fieldContext_User_email(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_User_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_User_updatedAt(ctx, field)
+			case "deletedAt":
+				return ec.fieldContext_User_deletedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -1800,7 +2019,7 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1810,7 +2029,7 @@ func (ec *executionContext) fieldContext_User_id(_ context.Context, field graphq
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1930,9 +2149,9 @@ func (ec *executionContext) _User_createdAt(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(models.TimeWrapper)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1942,7 +2161,92 @@ func (ec *executionContext) fieldContext_User_createdAt(_ context.Context, field
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_updatedAt(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(models.TimeWrapper)
+	fc.Result = res
+	return ec.marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_deletedAt(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_deletedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DeletedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.TimeWrapper)
+	fc.Result = res
+	return ec.marshalOTime2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_deletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4081,6 +4385,18 @@ func (ec *executionContext) _Movie(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._Movie_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Movie_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deletedAt":
+			out.Values[i] = ec._Movie_deletedAt(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4351,6 +4667,13 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "updatedAt":
+			out.Values[i] = ec._User_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deletedAt":
+			out.Values[i] = ec._User_deletedAt(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4820,6 +5143,16 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
+func (ec *executionContext) unmarshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx context.Context, v any) (models.TimeWrapper, error) {
+	var res models.TimeWrapper
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx context.Context, sel ast.SelectionSet, v models.TimeWrapper) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) marshalNUser2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v models.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
@@ -5197,6 +5530,22 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	_ = ctx
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOTime2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx context.Context, v any) (*models.TimeWrapper, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.TimeWrapper)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTime2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx context.Context, sel ast.SelectionSet, v *models.TimeWrapper) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v *models.User) graphql.Marshaler {

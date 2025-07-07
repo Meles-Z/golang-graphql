@@ -32,10 +32,6 @@ func (r *queryResolver) User(ctx context.Context, id string) (*models.User, erro
 }
 
 // Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver {
-	return &queryResolver{r}
-}
+func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-type queryResolver struct {
-	*Resolver
-}
+type queryResolver struct{ *Resolver }

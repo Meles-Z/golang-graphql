@@ -1,8 +1,12 @@
+scalar Time
+
 type User {
-  id: ID!
+  id: String!
   name: String!
   email: String!
-  createdAt: String!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
 }
 
 input UserInput {
