@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/meles-z/golang-graphql/app/domain/repository"
 	"github.com/meles-z/golang-graphql/app/models"
@@ -35,6 +36,7 @@ func (r *movieRepositoryImpl) Update(ctx context.Context, id string, input model
 	}
 	movie.Title = input.Title
 	movie.URL = input.URL
+	movie.ReleaseDate = input.ReleaseDate
 	if err := r.db.WithContext(ctx).Save(&movie).Error; err != nil {
 		return nil, err
 	}
@@ -42,7 +44,11 @@ func (r *movieRepositoryImpl) Update(ctx context.Context, id string, input model
 }
 
 func (r *movieRepositoryImpl) Delete(ctx context.Context, id string) (bool, error) {
-	if err := r.db.WithContext(ctx).Delete(&models.Movie{}, "id = ?", id).Error; err != nil {
+	movie, err := r.GetByID(ctx, id)
+	if err != nil {
+		return false, fmt.Errorf("user not found")
+	}
+	if err := r.db.WithContext(ctx).Delete(movie).Error; err != nil {
 		return false, err
 	}
 	return true, nil
