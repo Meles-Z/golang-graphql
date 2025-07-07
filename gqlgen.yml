@@ -141,8 +141,8 @@ models:
     model:
       - github.com/99designs/gqlgen/graphql.UUID
 
-  Time:
-    model: github.com/meles-z/golang-graphql/app/models.TimeWrapper
+  # Time:
+  #   model: github.com/meles-z/golang-graphql/app/models.TimeWrapper
   Movie:
     model: github.com/meles-z/golang-graphql/app/models.Movie
   User:

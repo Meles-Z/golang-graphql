@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -1093,9 +1094,9 @@ func (ec *executionContext) _Movie_createdAt(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(models.TimeWrapper)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Movie_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1137,9 +1138,9 @@ func (ec *executionContext) _Movie_updatedAt(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(models.TimeWrapper)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Movie_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1178,9 +1179,9 @@ func (ec *executionContext) _Movie_deletedAt(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.TimeWrapper)
+	res := resTmp.(*time.Time)
 	fc.Result = res
-	return ec.marshalOTime2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Movie_deletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2149,9 +2150,9 @@ func (ec *executionContext) _User_createdAt(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(models.TimeWrapper)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2193,9 +2194,9 @@ func (ec *executionContext) _User_updatedAt(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(models.TimeWrapper)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2234,9 +2235,9 @@ func (ec *executionContext) _User_deletedAt(ctx context.Context, field graphql.C
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.TimeWrapper)
+	res := resTmp.(*time.Time)
 	fc.Result = res
-	return ec.marshalOTime2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_deletedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5143,14 +5144,20 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) unmarshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx context.Context, v any) (models.TimeWrapper, error) {
-	var res models.TimeWrapper
-	err := res.UnmarshalGQL(v)
+func (ec *executionContext) unmarshalNTime2timeᚐTime(ctx context.Context, v any) (time.Time, error) {
+	res, err := graphql.UnmarshalTime(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTime2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx context.Context, sel ast.SelectionSet, v models.TimeWrapper) graphql.Marshaler {
-	return v
+func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel ast.SelectionSet, v time.Time) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalTime(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
 }
 
 func (ec *executionContext) marshalNUser2githubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v models.User) graphql.Marshaler {
@@ -5532,20 +5539,22 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) unmarshalOTime2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx context.Context, v any) (*models.TimeWrapper, error) {
+func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v any) (*time.Time, error) {
 	if v == nil {
 		return nil, nil
 	}
-	var res = new(models.TimeWrapper)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
+	res, err := graphql.UnmarshalTime(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOTime2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐTimeWrapper(ctx context.Context, sel ast.SelectionSet, v *models.TimeWrapper) graphql.Marshaler {
+func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel ast.SelectionSet, v *time.Time) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return v
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalTime(*v)
+	return res
 }
 
 func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋmelesᚑzᚋgolangᚑgraphqlᚋappᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v *models.User) graphql.Marshaler {
