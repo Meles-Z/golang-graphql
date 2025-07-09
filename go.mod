@@ -7,6 +7,7 @@ toolchain go1.23.10
 require (
 	github.com/99designs/gqlgen v0.17.76
 	github.com/confluentinc/confluent-kafka-go/v2 v2.11.0
+	github.com/go-redis/redis/v8 v8.11.5
 	github.com/google/uuid v1.6.0
 	github.com/spf13/viper v1.20.1
 	github.com/vektah/gqlparser/v2 v2.5.30
@@ -16,6 +17,8 @@ require (
 
 require (
 	github.com/agnivade/levenshtein v1.2.1 // indirect
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.3.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
