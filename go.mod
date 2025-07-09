@@ -8,7 +8,6 @@ require (
 	github.com/99designs/gqlgen v0.17.76
 	github.com/confluentinc/confluent-kafka-go/v2 v2.11.0
 	github.com/google/uuid v1.6.0
-	github.com/segmentio/kafka-go v0.4.48
 	github.com/spf13/viper v1.20.1
 	github.com/vektah/gqlparser/v2 v2.5.30
 	gorm.io/driver/postgres v1.6.0
@@ -27,9 +26,7 @@ require (
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
-	github.com/pierrec/lz4/v4 v4.1.15 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
 	github.com/sosodev/duration v1.3.1 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect

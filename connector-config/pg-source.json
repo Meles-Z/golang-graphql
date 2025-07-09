@@ -1,14 +1,14 @@
 {
-  "name": "pg-source",
+  "name": "pg-source-connector",
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
     "connection.url": "jdbc:postgresql://postgres:5432/mydb",
     "connection.user": "postgres",
     "connection.password": "postgres",
-    "topic.prefix": "pg-",
-    "table.whitelist": "your_table_name",
+    "table.whitelist": "users",
     "mode": "incrementing",
     "incrementing.column.name": "id",
-    "poll.interval.ms": "5000"
+    "topic.prefix": "pg-",
+    "poll.interval.ms": 5000
   }
 }
