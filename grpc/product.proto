@@ -1,0 +1,72 @@
+syntax="proto3";
+
+option go_package= "./pkg/pb/product";
+
+package product;
+
+
+// ---- Service Definition ----
+service ProductService {
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+  rpc FindProductById(FindProductByIdRequest) returns (FindProductByIdResponse);
+  rpc FindAllProducts(FindAllProductsRequest) returns (FindAllProductsResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+}
+
+// ---- Message Definitions ----
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+}
+
+// Create
+message CreateProductRequest {
+  string name = 1;
+  string description = 2;
+  double price = 3;
+}
+
+message CreateProductResponse {
+  Product product = 1;
+}
+
+// Find by ID
+message FindProductByIdRequest {
+  string id = 1;
+}
+
+message FindProductByIdResponse {
+  Product product = 1;
+}
+
+// Find all
+message FindAllProductsRequest {}
+
+message FindAllProductsResponse {
+  repeated Product products = 1;
+}
+
+// Update
+message UpdateProductRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+}
+
+message UpdateProductResponse {
+  Product product = 1;
+}
+
+// Delete
+message DeleteProductRequest {
+  string id = 1;
+}
+
+message DeleteProductResponse {
+  Product product = 1;
+}

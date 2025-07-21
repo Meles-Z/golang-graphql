@@ -1,0 +1,29 @@
+
+syntax="proto3";
+package user;
+
+option go_package= "./pkg/pb/user";
+
+service UserService{
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+    rpc FindUserById(FindUserByIdRequest) returns (FindUserByIdResponse);
+}
+
+message CreateUserRequest{
+    string name = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message CreateUserResponse{
+    string name = 1;
+    string email = 2;
+}
+
+message FindUserByIdRequest{
+    int64 id = 1;
+}
+message FindUserByIdResponse{
+    string name = 1;
+    string email = 2;
+}
